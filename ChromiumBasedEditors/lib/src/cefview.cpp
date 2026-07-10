@@ -67,6 +67,7 @@
 #include <boost/regex.hpp>
 
 #include <algorithm>
+#include <cwctype>
 
 #if defined (_LINUX) && !defined(_MAC)
 #define DONT_USE_NATIVE_FILE_DIALOGS
@@ -8143,6 +8144,28 @@ AscEditorType CCefViewEditor::GetEditorType()
 	return m_eType;
 }
 
+namespace {
+// Mirrors desktop-apps' ctabpanel.cpp::isDatabaseFile. Database engines are
+// read-only in the editor (no recover/save-in-place support), so recent-file
+// reopen must force view mode here too -- unlike a first-time Open, which
+// goes through CTabPanel::openLocalFile (with its own copy of this check)
+// before ever reaching CCefViewEditor::OpenLocalFile.
+bool IsDatabaseFile(const std::wstring& sPath)
+{
+	auto endsWithCI = [&sPath](const std::wstring& sSuffix)
+	{
+		if (sPath.length() < sSuffix.length())
+			return false;
+		return std::equal(sSuffix.rbegin(), sSuffix.rend(), sPath.rbegin(), [](wchar_t a, wchar_t b) {
+			return towlower(a) == towlower(b);
+		});
+	};
+	return endsWithCI(L".sqlite") || endsWithCI(L".sqlite3") || endsWithCI(L".db") || endsWithCI(L".db3") ||
+		endsWithCI(L".duckdb") || endsWithCI(L".parquet") || endsWithCI(L".pq") || endsWithCI(L".mdb") ||
+		endsWithCI(L".accdb");
+}
+}
+
 void CCefViewEditor::OpenLocalFile(const std::wstring& sFilePath, const int& nFileFormat_, const std::wstring& params)
 {
 	if (sFilePath.empty())
@@ -8624,7 +8647,8 @@ bool CCefViewEditor::OpenRecentFile(const int& nId)
 		if (nFormat == 0)
 			return false;
 
-		this->OpenLocalFile(oInfo.m_sPath, nFormat);
+		std::wstring sParams = IsDatabaseFile(oInfo.m_sPath) ? L"mode=view" : L"";
+		this->OpenLocalFile(oInfo.m_sPath, nFormat, sParams);
 		return true;
 	}
 
