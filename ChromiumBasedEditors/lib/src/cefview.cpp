@@ -8162,7 +8162,7 @@ bool IsDatabaseFile(const std::wstring& sPath)
 	};
 	return endsWithCI(L".sqlite") || endsWithCI(L".sqlite3") || endsWithCI(L".db") || endsWithCI(L".db3") ||
 		endsWithCI(L".duckdb") || endsWithCI(L".parquet") || endsWithCI(L".pq") || endsWithCI(L".mdb") ||
-		endsWithCI(L".accdb");
+		endsWithCI(L".accdb") || endsWithCI(L".bdb");
 }
 }
 
