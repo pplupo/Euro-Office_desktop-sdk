@@ -95,8 +95,12 @@ void posix_crash_signal(int signum);
 
 // GLib main-context callback for SIGTERM, invoked via g_unix_signal_add's
 // own self-pipe plumbing rather than directly from signal-handler context.
-// Safe to run CloseApplication()/exit() here, unlike inside an actual
-// signal handler -- see posix_crash_signal for why that distinction matters.
+// Requests a graceful shutdown through the app's own normal quit path
+// (CApplicationCEF::ExitMessageLoop(), the same call OnDestroyWindow() uses
+// when the last window closes) instead of calling exit()/CloseApplication()
+// directly -- see posix_crash_signal for why running arbitrary app code
+// from signal-handler context is unsafe in the first place, and the comment
+// on posix_term_signal's definition for why exit() itself was also wrong.
 gboolean posix_term_signal(gpointer user_data);
 
 class CLinuxData
@@ -113,13 +117,6 @@ public:
 			app_manager = manager;
 			signal(SIGSEGV, posix_crash_signal);
 			g_unix_signal_add(SIGTERM, posix_term_signal, NULL);
-		}
-	}
-	static void Close()
-	{
-		if (NULL != app_manager)
-		{
-			app_manager->CloseApplication();
 		}
 	}
 };

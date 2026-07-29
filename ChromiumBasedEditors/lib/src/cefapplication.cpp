@@ -632,6 +632,7 @@ int CApplicationCEF::RunMessageLoop(bool& is_runned)
 	is_runned = true;
 	m_pInternal->m_bIsMessageLoopRunned = true;
 #ifdef LINUX
+	CLinuxData::app_cef = this;
 	CLinuxData::Check(m_pInternal->m_pManager);
 #endif
 	return m_pInternal->message_loop->Run();

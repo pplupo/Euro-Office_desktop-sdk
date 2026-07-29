@@ -46,9 +46,18 @@ void posix_crash_signal(int signum)
 
 gboolean posix_term_signal(gpointer user_data)
 {
-	// release all subprocesses
-	CLinuxData::Close();
-	exit(3);
+	// Ask the CEF message loop to return, the same way OnDestroyWindow()
+	// does when the last window closes -- main() then runs its own,
+	// already-correct shutdown sequence (CloseApplication(), explicit
+	// delete of the manager, and only then returning from main()) once
+	// RunMessageLoop() unblocks. Calling exit()/CloseApplication() here
+	// directly bypassed that sequence entirely: exit() triggers the C++
+	// runtime's own global/static destructor sweep across the whole
+	// process, in a different (and for a multi-library build, unordered)
+	// sequence from what main() intends, which could tear down state the
+	// manager singleton still depended on before its own destructor ran.
+	if (CLinuxData::app_cef)
+		CLinuxData::app_cef->ExitMessageLoop();
 	return G_SOURCE_REMOVE;
 }
 
