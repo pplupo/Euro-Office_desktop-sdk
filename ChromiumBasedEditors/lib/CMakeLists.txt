@@ -180,7 +180,7 @@ set(ASCDOCUMENTSCORE_HEADERS
     "${CMAKE_CURRENT_SOURCE_DIR}/src/cefwrapper/client_renderer_params.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/cefwrapper/client_scheme.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/fileconverter.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/x2t.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/x2t.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/templatesmanager.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/cefwrapper/client_resource_handler_async.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/window_handle.h"

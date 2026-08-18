@@ -33,7 +33,7 @@
 #include "./../../../../core/Common/OfficeFileFormatChecker.h"
 #include "./../../../../core/DesktopEditor/xml/include/xmlutils.h"
 #include "./../../../../core/DesktopEditor/common/StringExt.h"
-#include "./x2t.h"
+#include "../include/x2t.h"
 #include "./../../../../core/DesktopEditor/common/Base64.h"
 
 class CTemplateRec

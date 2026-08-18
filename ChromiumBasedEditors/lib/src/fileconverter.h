@@ -36,7 +36,7 @@
 #include "../../../../core/DesktopEditor/graphics/pro/Image.h"
 #include "../../../../core/Common/OfficeFileErrorDescription.h"
 
-#include "./x2t.h"
+#include "../include/x2t.h"
 
 std::wstring GetPresentationThemes(CAscApplicationManager* pManager)
 {

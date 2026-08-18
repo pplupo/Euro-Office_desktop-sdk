@@ -32,7 +32,7 @@
 #include <stdio.h>
 #endif
 
-#include "../include/applicationmanager.h"
+#include "applicationmanager.h"
 #include "../../../../core/DesktopEditor/common/File.h"
 #include "../../../../core/DesktopEditor/common/StringBuilder.h"
 

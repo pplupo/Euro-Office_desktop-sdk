@@ -1,6 +1,6 @@
 #include "./../internal/base.h"
 
-#include "../../../src/x2t.h"
+#include "../../../include/x2t.h"
 #include "../../../../../../core/DesktopEditor/common/Directory.h"
 #include "../../../../../../core/Common/OfficeFileFormatChecker.h"
 //#include "../../../../../../core/DesktopEditor/graphics/BaseThread.h"
