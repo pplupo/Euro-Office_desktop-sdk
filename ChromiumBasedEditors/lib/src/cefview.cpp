@@ -47,6 +47,7 @@
 #include "include/wrapper/cef_byte_read_handler.h"
 
 #include "../../../../core/Common/OfficeFileFormatChecker.h"
+#include "../../../../core/Common/DatabaseFormats.h"
 #include "./fileconverter.h"
 #include "./fileprinter.h"
 
@@ -8160,9 +8161,14 @@ bool IsDatabaseFile(const std::wstring& sPath)
 			return towlower(a) == towlower(b);
 		});
 	};
-	return endsWithCI(L".sqlite") || endsWithCI(L".sqlite3") || endsWithCI(L".db") || endsWithCI(L".db3") ||
-		endsWithCI(L".duckdb") || endsWithCI(L".parquet") || endsWithCI(L".pq") || endsWithCI(L".mdb") ||
-		endsWithCI(L".accdb") || endsWithCI(L".bdb");
+	// Single authoritative database-extension list (FR-005): consult
+	// GetSupportedDatabaseExtensions() instead of a separate hardcoded list.
+	for (const auto& dbEntry : GetSupportedDatabaseExtensions())
+	{
+		if (endsWithCI(dbEntry.extension))
+			return true;
+	}
+	return false;
 }
 }
 
